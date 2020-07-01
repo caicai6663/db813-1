@@ -1,0 +1,56 @@
+<div class="layui-side layui-bg-black">
+  <div class="layui-side-scroll">
+    <!-- 左侧导航-->
+    <ul class="layui-nav layui-nav-tree"  lay-filter="test" lay-shrink="all">
+      <li class="layui-nav-item">
+        <a class="my-lan-style" href="javascript:;">用户管理</a>
+        <dl class="layui-nav-child">
+          <dd><a href="{:url('system/users/index')}">用户列表</a></dd>
+          <dd><a href="{:url('system/users/add')}">用户添加</a></dd>
+          <dd><a href="{:url('system/node/lists')}">权限列表</a></dd>
+          <dd><a href="{:url('system/node/add')}">权限添加</a></dd>
+          <dd><a href="{:url('system/role/index')}">角色列表</a></dd>
+          <dd><a href="{:url('system/role/add')}">角色添加</a></dd>
+          <dd><a href="{:url('system/role/node_fp')}">分配角色权限</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item">
+        <a class="my-lan-style" href="javascript:;">商品</a>
+        <dl class="layui-nav-child">
+          <dd><a href="{:url('system/category/index')}">商品三级分类</a></dd>
+          <dd><a href="{:url('system/spec/index')}">规格分类设置</a></dd>
+          <dd><a href="{:url('system/goods/add')}">添加商品</a></dd>
+          <dd><a href="{:url('system/group/add')}">添加团购</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item">
+        <a class="my-lan-style" href="javascript:;">订单管理</a>
+        <dl class="layui-nav-child">
+          <dd><a href="{:url('system/order/index')}">订单列表</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item">
+        <a class="my-lan-style" href="javascript:;">广告</a>
+        <dl class="layui-nav-child">
+          <dd><a href="{:url('system/ad/ad_position_list')}">广告位</a></dd>
+          <dd><a href="{:url('system/ad/ad_list')}">广告</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item">
+        <a class="my-lan-style" href="javascript:;">文章和公告</a>
+        <dl class="layui-nav-child">
+          <dd><a href="{:url('system/article/index')}">文章列表</a></dd>
+          <dd><a href="{:url('system/article/show')}">文章分类</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <script type="text/javascript">
+      $(".layui-nav-item").mouseover(function(){
+        $(this).children('a').click();//优化展示效果
+      });
+      $(".layui-nav-item").mouseout(function(){
+        $(this).children('a').click();//优化展示效果
+      });
+    </script>
+  </div>
+</div>

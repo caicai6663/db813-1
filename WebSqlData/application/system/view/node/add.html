@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- 导入文件 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <!-- 头部 -->  {include file='public/top' /}
+  <!-- 左侧 -->  {include file='public/left' /}
+    <!-- 内容主体区域 -->
+  <div class="layui-body">
+
+    <div style="padding: 15px;">
+    <form class="layui-form" action="">
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">权限名称</label>
+	    <div class="layui-input-block">
+	      <input type="" name="nodename" lay-verify="required" lay-reqtext="权限名称是必填项，岂能为空？" placeholder="请输入" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">选择控制器</label>
+	    <div class="layui-input-block">
+	      <select name="controller" lay-filter="controller" id="controller">
+	      	<option value="">请选择</option>
+			{volist name="arrs" id="k"}
+				<option value="{$k}">{$k}</option>
+			{/volist}
+	      </select>
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">选择操作</label>
+	    <div class="layui-input-block">
+	      <select name="action" lay-filter="action" id="action">
+	        <option value="">请选择</option>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+    </div>
+
+  </div>
+  <!-- 底部 -->  {include file='public/bottom' /}
+</div>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+	var form = layui.form
+	,layer = layui.layer;
+	//监听提交
+	form.on('submit(demo1)', function(data){
+		$.ajax({
+			method: "POST",
+			url: "{:url('node/add')}",
+			data: { nodename: data.field.nodename, controller: data.field.controller,action: data.field.action },
+			dataType: 'json'
+		}).done(function( res ) {
+			if(res.code == '0000'){
+				layer.msg('添加成功');
+				//window.location.href = '{:url("users/index")}';
+			}
+			layer.msg(res.msg);
+		});
+		return false;
+	});
+	//展示 控制器拥有的方法
+	form.on('select(controller)', function(data){
+		$.ajax({
+			method: "POST",
+			url: "{:url('node/get_fun')}",
+			data: { key: data.value },
+			dataType: 'json'
+		}).done(function( res ) {
+			if(res.code == '0000'){
+				var html = "";
+				for(var v in res.data1)
+				{
+					html += "<option value='"+res.data1[v]+"'>"+res.data1[v]+"</option>";
+				}
+				$('#action').append(html);
+				form.render('select');
+			}
+			layer.msg(res.msg);
+		});
+	});
+});
+</script>
+</body>
+</html>

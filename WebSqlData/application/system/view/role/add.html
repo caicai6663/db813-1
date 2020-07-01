@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- 导入文件 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <!-- 头部 -->  {include file='public/top' /}
+  <!-- 左侧 -->  {include file='public/left' /}
+    <!-- 内容主体区域 -->
+  <div class="layui-body">
+    <div style="padding: 15px;">
+    
+    <form class="layui-form" action="">
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">角色名</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="rolename" lay-verify="required" lay-reqtext="是必填项，岂能为空？" placeholder="请输入" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="submit" class="layui-btn" lay-submit="" lay-filter="ti">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+    
+    </div>
+  </div>
+  <!-- 底部 -->  {include file='public/bottom' /}
+</div>
+<script>
+layui.use(['form'], function(){
+  var form = layui.form
+  ,layer = layui.layer;
+  //监听提交
+  form.on('submit(ti)', function(data){
+    $.ajax({
+   		method: "POST",
+   		url: "{:url('role/add')}",
+   		data: { rolename: data.field.rolename },
+   		dataType: 'json'
+   	}).done(function( res ) {
+   		if(res.code == '0000'){
+   			layer.msg('角色添加成功');
+   			window.location.href = '{:url("role/index")}';
+   		}else{
+   			layer.msg(res.msg);
+   		}
+   	});
+    return false;
+  });
+});
+</script>
+</body>
+</html>

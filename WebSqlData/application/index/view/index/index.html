@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><!-- gbk是中国的中文编码，utf-8是国际通用的编码。 -->
+	<title></title>
+</head>
+<body>
+<div align="center">
+	<div hidden>
+<div class="layui-layout layui-layout-admin">
+  <!-- 头部开始 -->  {include file='public/top' /}
+  <!-- 左侧开始 -->  {include file='public/left' /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+    
+    <form class="layui-form" action="">
+
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">用户名</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="username" lay-verify="required" lay-reqtext="用户名是必填项，岂能为空？" placeholder="请输入" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	  
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">用户密码</label>
+	    <div class="layui-input-inline">
+	      <input type="password" id="pwd" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+	    </div>
+	    <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>
+	  </div>
+	  
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">确认密码</label>
+	    <div class="layui-input-inline">
+	      <input type="password" name="password2" lay-verify="pass2" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+	    </div>
+	    <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>
+	  </div>
+	  
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+    
+    </div>
+  </div>
+  <!-- 底部开始 -->  {include file='public/bottom' /}
+</div>
+	</div>
+	<!-- <p><a href="{:url('mi/index/index')}">进入 mi</a></p> -->
+	<!-- <p><a href="{:url('system/index/index')}">进入 system</a></p> -->
+	<h1><a href="{:url('index/Websqldata/index')}">进入 WebSqlData</a></h1>
+</div>
+</body>
+</html>

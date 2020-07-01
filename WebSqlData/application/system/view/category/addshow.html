@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- 导入文件开始 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <!-- 头部开始 -->  {include file='public/top' /}
+  <!-- 左侧开始 -->  {include file='public/left' /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+<form class="layui-form" action="">
+  <div class="layui-form-item">
+    <h1>添加 {$cate} 分类</h1>
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <input type="" name="name" lay-verify="required" lay-reqtext="名称是必填项" placeholder="请输入" autocomplete="off" class="layui-input" f-id="{$f_id}" id="f-id">
+    </div>
+  </div>
+	<div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+</form>
+
+    </div>
+  </div>
+  <!-- 底部开始 -->  {include file='public/bottom' /}
+</div>
+<script>
+layui.use(['form'], function(){
+  var form = layui.form//加载模块
+  ,layer = layui.layer;//加载模块
+  //监听提交
+  form.on('submit(demo1)', function(data){
+    var f_id=$('#f-id').attr('f-id');
+    var name=$('#f-id').val();
+    $.ajax({
+     		method: "POST",
+     		url: "{:url('category/save')}",
+     		data: {f_id:f_id,name:name},
+     		dataType: 'json'
+   	}).done(function( res ) {
+     		if(res.code == '0000'){
+          layer.msg(res.msg);/*添加成功*/
+          window.location.href = '{:url("category/index")}';
+     		}else{
+     			  layer.msg(res.msg);
+     		}
+   	});
+    return false;
+  });
+
+});
+</script>
+</body>
+</html>

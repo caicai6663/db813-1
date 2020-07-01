@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>particles.js</title>
+  <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+  <meta name="author" content="Vincent Garreau">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" media="screen" href="/static/system/login/login.css">
+  <script src="/static/system/login/particles.js"></script>
+  <script src="/static/system/login/app.js"></script>
+  <script src="/static/js/jquery.js"></script>
+</head>
+<body>
+<div id="particles-js" style="display: flex;align-items: center;justify-content: center">
+<canvas class="particles-js-canvas-el" width="1366" height="625" style="width: 100%; height: 100%;"></canvas></div>
+<div class="login-page">
+   <div class="login-content">
+     <div class="login-tit">登录</div>
+     <div class="login-input">
+       <input id="username" type="text" placeholder="用户名/手机号">
+     </div>
+     <div class="login-input">
+      <input id="password" type="password" placeholder="密码">
+    </div>
+    <div class="login-btn">
+      <div class="login-btn-left">
+        <span id="btn_login">登录</span>
+      </div>
+      <div class="login-btn-right" onclick="changeImg()" style="display:none;">
+        <img src="/static/system/login/checked.png" alt="" id="picture"> 记住密码
+      </div>
+    </div>
+   </div>
+</div>
+<script>
+  function changeImg(){
+    let pic = document.getElementById('picture');
+    console.log(pic.src)
+    if(pic.getAttribute("src",2) =="img/check.png"){
+      pic.src ="img/checked.png"
+    }else{
+      pic.src ="img/check.png"
+    }
+  }
+ $(function(){
+	 $('#btn_login').click(function(){
+		 $.ajax({
+	   		method: "POST",
+	   		url: "{:url('users/login')}",
+	   		data: { username: $('#username').val(),password: $('#password').val()},
+	   		dataType: 'json'
+	   	}).done(function( res ) {
+	   		if(res.code == '0000'){
+	   			window.location.href = '{:url("users/index")}';
+	   		}else{
+	   			alert(res.msg);
+	   		}
+	   	});
+	    return false;
+	  });
+ });
+</script>
+</body></html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>广告位 列表</title>  <!-- 导入文件 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->{include file='public/top' /}
+    <!-- 左侧 -->{include file='public/left' /}
+    <div class="layui-body"><!-- 内容开始 -->
+      <h1>广告位 列表</h1>
+      <h2><a href="{:url('ad/ad_position_add')}">添加广告位</a></h2>
+      <table class="layui-hide" id="test"></table>
+    </div><!-- 内容 结束 -->
+    <!-- 底部 -->{include file='public/bottom' /}
+  </div>
+</body>
+</html><script>
+layui.use(['table','laypage','layer'], function(){
+  var table = layui.table
+  ,laypage = layui.laypage
+  ,layer = layui.layer;
+  //数据表格
+  table.render({
+    elem: '#test'
+    ,contentType: 'json' //发送到服务端的内容编码类型
+    ,url:"{:url('ad/get_ad_position_page_data')}" //数据接口
+    //数据格式 解析 的回调函数，用于将返回的任意数据格式解析成 table 组件规定的数据格式
+    ,parseData: function(res){ //res 即为原始返回的数据
+      return {
+        "code": res.code, //解析接口状态
+        "msg": res.msg, //解析提示文本
+        "count": res.data.total, //解析数据长度
+        "data": res.data.data //解析数据列表
+      }
+    }
+    //开启分页
+    ,page: {
+      layout: ['limit', 'count', 'prev', 'page', 'next']
+      //,groups:5 //连续出现的页码个数
+      ,prev:'上一页'
+      ,next:'下一页'
+      ,first:'首页'
+      ,last:'尾页'
+      ,limit:5
+      ,limits:[5,8]
+    }
+    //表头
+    ,cols: [[
+      {field:'position_id', title: 'ID'}
+      ,{field:'position_name', title: '广告位名称'}
+      ,{field:'ad_width', title: '广告位宽度'}
+      ,{field:'ad_height', title: '广告位高度'}
+      ,{field:'position_desc', title: '广告位描述'}
+      ,{field:'is_open', title: '是否启用'}
+    ]]
+    //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+    ,cellMinWidth: 20
+    ,height: 312
+    /*
+    //用于对分页请求的参数：page、limit重新设定名称
+    ,request: { //请求
+      pageName: 'page' //页码的参数名称，默认：page
+      ,limitName: 'limit' //每页数据量的参数名，默认：limit
+    }
+    //重新规定返回的数据格式
+    ,response: { //响应
+      statusName: 'status' //规定数据状态的字段名称，默认：code
+      ,statusCode: 0 //规定成功的状态码，默认：0
+      ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+      ,countName: 'count' //规定数据总数的字段名称，默认：count
+      ,dataName: 'data' //规定数据列表的字段名称，默认：data
+    }
+    */
+  });
+
+});
+</script>

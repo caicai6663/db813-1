@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>文章添加</title>  <!-- 导入文件 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->{include file='public/top' /}
+    <!-- 左侧 -->{include file='public/left' /}
+    <div class="layui-body"><!-- 内容开始 -->
+      <div align="center">
+        <h1>文章添加 页面</h1>
+        <form action="{:url('article/article_save')}" method="post">
+          <table border="1">
+            <tr>
+              <td>分类</td>
+              <td>
+                <select>
+                  {foreach $type as $key=>$vo } 
+                  <option value="{$vo.cat_id}">{$vo.cat_name}</option>
+                  {/foreach}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>标题</td>
+              <td><input type="" name="title"></td>
+            </tr>
+            <tr>
+              <td>内容</td>
+              <td><input type="" name="content"></td>
+            </tr>
+            <tr>
+              <td>作者</td>
+              <td><input type="" name="author"></td>
+            </tr>
+            <tr>
+              <td>作者邮箱</td>
+              <td><input type="" name="author_email"></td>
+            </tr>
+            <tr>
+              <td>关键词</td>
+              <td><input type="" name="keywords"></td>
+            </tr>
+            <tr>
+              <td>是否开启</td>
+              <td>
+                <input type="radio" name="is_open" value="1" checked="">是
+                <input type="radio" name="is_open" value="2">否
+              </td>
+            </tr>
+            <tr>
+              <td>附件地址</td>
+              <td><input type="" name="file_url"></td>
+            </tr>
+            <tr>
+              <td>打开方式</td>
+              <td><input type="" name="open_type"></td>
+            </tr>
+            <tr>
+              <td>链接地址</td>
+              <td><input type="" name="link"></td>
+            </tr>
+            <tr>
+              <td>文章摘要</td>
+              <td><input type="" name="desc"></td>
+            </tr>
+            <tr>
+              <td>发布时间</td>
+              <td><input type="" name="publish_time"></td>
+            </tr>
+            <tr>
+              <td>缩略图</td>
+              <td><input type="" name="thumb"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input type="submit" name=""></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div><!-- 内容 结束 -->
+    <!-- 底部 -->{include file='public/bottom' /}
+  </div>
+</body>
+</html>

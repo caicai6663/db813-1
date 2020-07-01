@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- 导入文件 -->{include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin"><!-- 总页面 开始 -->
+<!-- 头部 -->{include file='public/top' /}
+<!-- 左侧 -->{include file='public/left' /}
+<div class="layui-body"><!-- 页面 内容 展示 开始 -->
+<!-- 内容 开始 -->
+      <div style="padding: 15px;">
+<form class="layui-form" lay-filter="example" action=""><!-- 表单 开始 -->
+<!-- 选项卡 功能 开始 -->
+<div class="layui-tab">
+      <!-- 选项卡 标题 开始 -->
+		  <ul class="layui-tab-title">
+		    <li class="layui-this">通用信息</li>
+		    <li>图片和相册</li>
+		    <li>单品规格设置</li>
+		  </ul>
+      <!-- 选项卡 标题 结束 -->
+      <!-- 选项卡 内容 开始 -->
+      <div class="layui-tab-content">
+        <!-- 添加 通用信息 开始 -->
+		    <div class="layui-tab-item layui-show" id="addmsg">
+<!-- 商品名称 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">商品名称</label>
+  <div class="layui-input-block">
+    <input type="" name="name" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+<!-- 商品库存 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">商品库存</label>
+  <div class="layui-input-block">
+    <input type="" name="store_num" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+<!-- 市场价格 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">市场价格</label>
+  <div class="layui-input-block">
+    <input type="" name="market_price" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+<!-- 商品价格 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">商品价格</label>
+  <div class="layui-input-block">
+    <input type="" name="shop_price" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+<!-- 成本价格 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">成本价格</label>
+  <div class="layui-input-block">
+    <input type="" name="cost_price" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+<!-- 关键字 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">关键字</label>
+  <div class="layui-input-block">
+    <input type="" name="keywords" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+<!-- 商品描述 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">商品描述</label>
+  <div class="layui-input-block">
+    <input type="" name="description" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+<!-- 商品详情 -->
+<div class="layui-form-item layui-form-text">
+  <label class="layui-form-label">商品详情</label>
+  <div class="layui-input-block">
+    <textarea name="goods_content" class="layui-textarea"></textarea>
+  </div>
+</div>
+<!-- 是否显示 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">是否上架</label>
+  <div class="layui-input-block">
+    <input type="radio" name="is_show" value="1" title="是" checked="">
+    <input type="radio" name="is_show" value="0" title="否">
+  </div>
+</div>
+<!-- 排序 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">排序</label>
+  <div class="layui-input-block">
+    <input type="" name="sort" class="layui-input" lay-verify="title" autocomplete="off">
+  </div>
+</div>
+        </div>
+        <!-- 添加 通用信息 结束 -->
+        <!-- 图片和相册 开始 -->
+		    <div class="layui-tab-item" id="uploads">
+          <!-- 首图上传 -->
+          <div class="layui-upload">
+            <button type="button" class="layui-btn" id="first_img_button">首图上传</button>
+            <div class="layui-upload-list">
+              <img class="layui-upload-img" id="first_img_show" width="50px" height="50px"><!-- 预览图片 -->
+              <p id="first_img_error"></p><!-- 失败状态 -->
+              <input type="hidden" name="goods_img" id="first_img_hide"/><!-- 隐藏信息 -->
+            </div>
+          </div>
+          <!-- 相册上传 -->
+          <div class="layui-upload">
+            <button type="button" class="layui-btn" id="album">相册上传</button> 
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+              <div class="layui-upload-list" id="album_show"></div>
+              <div id="imgs"></div>
+            </blockquote>
+          </div>
+        </div>
+        <!-- 图片和相册 结束 -->
+        <!-- 单品规格设置 开始 -->
+		    <div class="layui-tab-item" id="addspec"><!-- 小米手机分类ID=55 -->
+          <!-- 商品分类 三级联动 -->
+          <label class="layui-form-label">商品分类</label>
+          <div class="layui-input-inline">
+            <select name="cate1_id" id="cate1_id" lay-filter="cate1_id">
+              <option disabled="">请选择一级分类</option>
+              {foreach $list as $key=>$vo}
+              <option value="{$vo.id}">{$vo.name}</option>
+              {/foreach}
+            </select>
+          </div>
+          <div class="layui-input-inline">
+            <select name="cate2_id" id="cate2_id" lay-filter="cate2_id">
+              <option disabled="">请选择二级分类</option>
+            </select>
+          </div>
+          <div class="layui-input-inline">
+            <select name="cate3_id" id="cate3_id" lay-filter="cate3_id">
+              <option disabled="">请选择三级分类</option>
+            </select>
+          </div>
+          <!-- 规格 -->
+          <div id="spec_div">
+            <div class="layui-form-item" my-spec-type="spec-type">
+              <label class="layui-form-label">复选框</label>
+              <div class="layui-input-block">
+                <input type="checkbox" title="写作" value="" lay-filter="spec_checkbox">
+              </div>
+            </div>
+          </div>
+          <!-- 表格 -->
+          <div class="layui-form" id="spec_table"></div>
+        </div><!-- 单品规格设置 结束 -->
+</div>
+<!-- 选项卡 内容 结束 -->
+		</div>
+    <!-- 选项卡 功能 结束 -->
+<!-- 提交按钮 开始 -->
+<div class="layui-form-item">
+  <div class="layui-input-block">
+    <button type="submit" class="layui-btn" lay-submit="" lay-filter="hand_in">立即提交</button>
+    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+  </div>
+</div>
+<!-- 提交按钮 结束 -->
+</form><!-- 表单 结束 -->
+      </div><!-- 内容 结束 -->
+    </div><!-- 页面 内容 展示 结束 -->
+<!-- 底部 -->{include file='public/bottom' /}
+</div><!-- 总页面 结束 -->
+</body></html><script>
+layui.use(['form','upload','element','layedit','laydate'], function(){
+  var $ = layui.jquery
+  ,form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate
+  ,upload = layui.upload
+  ,element = layui.element;
+  /*监听 每一个 复选框*/
+  /*复选框 设置一个存放规格名称的属性*/
+  form.on('checkbox(spec_checkbox)',function(data){
+    /*表头*/
+    var table_head=[];
+    var hang=$('[my-spec-type="spec-type"]');/*规格行*/
+    /*遍历规格行*/
+    for (var i = 0; i < hang.length; i++) {
+      var checkbox=hang[i].children('div > input');
+      /*遍历该行下的复选框*/
+      for (var y = 0; y < checkbox.length; y++) {
+        if (checkbox[y].prop('checked')) {
+          var val=hang[i].children('label').text();
+          table_head.push(val);break;
+        }
+      }
+    }
+      /*if ($(this).prop('checked')) {
+        table_head[i]=$(this).parent().prev().text();continue;
+      }*/
+console.log(table_head);return false;
+/*console.log(data.elem); //得到checkbox原始DOM对象
+console.log(data.elem.checked); //是否被选中，true或者false
+console.log(data.value); //复选框value值，也可以通过data.elem.value得到*/
+  });
+  /*监听三级 建议使用模板替换*/
+  form.on('select(cate3_id)', function(data){
+    $.ajax({
+      method:"POST",
+      url:"{:url('goods/get_spec')}",
+      data:{type_id:data.value},
+      dataType:'json'
+    }).done(function(res) {
+      if(res.code == 200){
+        var html = "";
+        for(var vo in res.type){
+          html+='<div class="layui-form-item" my-spec-type="spec-type">';/*行*/
+          html+='<label class="layui-form-label">'+res.type[vo].name+'</label>';/*规格分类名称*/
+          html+='<div class="layui-input-block">';/*规格 值*/
+          for(var v in res.val){
+            if (res.val[v].f_id==res.type[vo].id) {
+              html+='<input type="checkbox" title="'+res.val[v].name+'" value="'+res.val[v].id+'" lay-filter="spec_checkbox">';/*复选框*/
+            }
+          }
+          html+='</div></div>';
+        }
+        $('#spec_div').empty();$('#spec_div').append(html);
+        form.render('checkbox');
+        return false;
+        /* v 为数组索引 for in 循环不仅可以遍历对象的属性，还可以遍历数组*/
+        /*旧*/
+        for(var v in res.data){
+          html += '<div class="layui-form-item">';
+          html += '<label class="layui-form-label" id="spec_'+res.data[v].id+'" >'+res.data[v].name+'</label>';
+          html += '<div class="layui-input-block">';
+          for(var vv in res.data[v].list){
+            var obj = res.data[v].list[vv];
+            html += '<input type="checkbox" name="spec['+res.data[v].id+'][]" lay-filter="spec" lay-skin="primary" id="spec_value_'+obj.id+'" data-spec="'+res.data[v].id+'" value="'+obj.id+'" title="'+obj.value+'">';
+          }
+          html += '</div></div>';
+        }
+        $('#spec_div').html('');  //清空复选框
+        $('#spec_table').html('');//清空表格
+        $('#spec_div').append(html);//将构建好的复选框添加到盒子里
+        form.render('checkbox');//重新渲染
+      }else{
+        layer.msg(res.msg);
+      }
+    });
+  });
+  /*监听二级*/
+  form.on('select(cate2_id)',function(data){
+    $.ajax({
+      method:'post',
+      url:"{:url('goods/get_cate3')}",
+      data:{type_id:data.value},
+      dataType:'json'
+    }).done(function(res){
+      if (res.code==200) {
+        var list='';
+        $.each(res.list,function(i,v){
+          list+='<option value="'+v.id+'">'+v.name+'</option>';
+        });
+        $('#cate3_id').children(':not(:eq(0))').empty();
+        $('#cate3_id').append(list);
+        form.render();//重新渲染
+      }
+    });
+  });
+  /*监听一级*/
+  form.on('select(cate1_id)',function(data){
+    $.ajax({
+      method:'post',
+      url:"{:url('goods/get_cate2')}",
+      data:{type_id:data.value},
+      dataType:'json'
+    }).done(function(res){
+      if (res.code==200) {
+        var list='';
+        $.each(res.list,function(i,v){
+          list+='<option value="'+v.id+'">'+v.name+'</option>';
+        });
+        $('#cate2_id').children(':not(:eq(0))').empty();
+        $('#cate2_id').append(list);
+        form.render();//重新渲染
+      }
+    });
+  });
+  /*相册上传*/
+  upload.render({
+    elem: '#album'
+    ,url: '{:url("goods/uploads")}'
+    ,field: 'goods_img' /*设定文件域的字段名*/
+    ,multiple: true /*倍数*/
+    /*文件上传前的回调*/
+    ,before: function(obj){
+      /*preview 预览*/
+      obj.preview(function(index, file, result){
+        $('#album_show').append('<img src="'+result+'" alt="'+file.name+'" class="layui-upload-img" width="50px" height="50px">');
+      });
+    }
+    /*当文件全部被提交后，才触发*/
+    ,allDone: function(obj){
+      layer.msg('成功上传'+obj.successful+'图片');//当文件全部被提交后，才触发
+    }
+    /*每个文件提交一次触发一次*/
+    ,done: function(res){
+      if(res.code==200){
+        /*隐藏*/
+        $('#imgs').append('<input type="hidden" name="imgs[]" value="'+res.src+'" />');
+      }
+    }
+    ,accept:'file' /*允许上传时校验的文件类型*/
+    ,size:2048 /*文件最大可允许上传的大小，单位 KB*/
+    ,number:9 /*同时可上传的文件数量*/
+  });
+  /*首图上传*/
+  var uploadInst = upload.render({
+      elem: '#first_img_button'
+      ,url: '{:url("goods/uploads")}'
+      ,field: 'goods_img'
+      /*预览*/
+      ,before: function(obj){
+        obj.preview(function(index, file, result){
+          $('#first_img_show').attr('src', result);
+        });
+      }
+      /*上传完毕回调*/
+      ,done: function(res){
+        if(res.code == 200){
+          $('#first_img_show').prop("src",'/'+res.src);
+          /*隐藏信息设置*/
+          $('#first_img_hide').empty();
+          $('#first_img_hide').val(res.src);
+          return layer.msg(res.msg);
+        }else{
+          return layer.msg(res.msg);
+        }
+      }
+      /*请求异常回调,演示失败状态，并实现重传*/
+      ,error: function(){
+        var first_img_error = $('#first_img_error');
+        var span_a = '<span style="color: #FF5722;">上传失败</span>';
+        span_a += '<a class="layui-btn layui-btn-xs demo-reload">重试</a>';
+        first_img_error.html(span_a);
+        first_img_error.find('.demo-reload').on('click', function(){
+          uploadInst.upload();
+        });
+      }
+  });
+  //监听提交
+  form.on('submit(hand_in)', function(data){
+      $.ajax({
+          method: "POST",
+          url: "{:url('goods/addmsg')}",
+          data: data.field,
+          dataType: 'json'
+      }).done(function(res){
+          if(res.code == '0000'){
+            layer.msg('添加成功');
+          }else{
+            layer.msg('添加失败');
+          }
+      });
+      return false;
+  });
+
+});
+</script>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- 导入文件 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->    {include file='public/top' /}
+    <!-- 左侧 -->    {include file='public/left' /}
+    <div class="layui-body">
+      <!-- 内容主体区域 -->
+      <div style="padding: 15px;">
+<form class="layui-form" lay-filter="example">
+  <!-- 三级联动 -->
+	<div class="layui-form-item">
+		<label class="layui-form-label">三级联动</label>
+		<div class="layui-input-inline">
+			<select id="quiz1" lay-filter="quiz1">
+        <option value="0" selected="">请选择</option>
+        {volist name="cate_one" id="vo"}
+        <option  value="{$vo.id}">{$vo.name}</option>
+        {/volist}
+			</select>
+		</div>
+		<div class="layui-input-inline">
+			<select id="quiz2" lay-filter="quiz2">
+        <option value="0" selected="">请选择</option>
+			</select>
+		</div>
+		<div class="layui-input-inline">
+			<select id="quiz3" lay-filter="quiz3">
+        <option value="0" selected="">请选择</option>
+			</select>
+		</div>
+	</div>
+  <!-- 添加 新规格 -->
+  <label class="layui-form-label">添加新规格</label>
+  <div class="layui-input-block">
+    <input type="" id="new-spec" lay-verify="title" autocomplete="off" class="layui-input">
+  </div>
+  <script type="text/javascript">
+    $('#new-spec').blur(function(){
+      var newspec=$(this).val();
+      if(newspec){}else{alert('请输入新规格');return false;}
+      var category_id=$("#quiz3").val();
+      if(category_id==0){alert('请选择三级分类');return false;}
+      $.ajax({
+        url:"{:url('spec/add_new_spec')}",
+        type:'post',
+        data:{newspec:newspec,category_id:category_id},
+      }).done(function(e){
+        if(e.code==200){
+          alert(e.msg);
+        }else{
+          alert(e.msg);
+        }
+      });
+    });
+  </script>
+  <!-- 展示 规格 -->
+  <div class="layui-form-item" id="div-spec-show"></div>
+</form>
+      </div>
+    </div>
+<!-- 底部 -->{include file='public/bottom'/}
+</div>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  /*规格 展示 （监听 quiz3）*/
+  form.on('select(quiz3)', function(data){
+        var id=$('#quiz3').val();if(id==0){alert('请选择');return false;}
+        $.ajax({
+            url:"{:url('spec/spec_show')}",
+            type:'post',
+            data:{id:id},
+        }).done(function(e){
+              if(e.code==200){
+                $('#div-spec-show').empty();
+                var html='<br>';
+                $.each(e.speclist,function(i,v){
+                  //规格
+                    html+='<label class="layui-form-label">'+v.name+'</label>';
+                    html+='<div class="layui-input-block">';
+                    //规格值
+                    $.each(v.child,function(p,n){
+                      html+='<input type="checkbox" title="'+n.name+'">';
+                    });
+                    //添加新的规格值
+                    html+='<button type="button" class="layui-btn layui-btn-primary" data-click="del" c-id="'+v.id+'" >删除</button>'
+                    html+='</div><br>添加新的规格值';
+                    html+='<input type="" class="layui-input" f-id="'+v.id+'" data-attr="spec" >';
+                });
+                $('#div-spec-show').append(html);
+                form.render();
+                //添加 新的 规格值
+                $('input[data-attr="spec"]').on('blur',function(){
+                    var newspec=$(this).val();
+                    var f_id=$(this).attr('f-id');
+                    if(newspec){}else{alert('请输入新的规格值');return false;}
+                    $.ajax({
+                      url:"{:url('spec/add_new_spec_value')}",
+                      type:'post',
+                      data:{newspec:newspec,f_id:f_id},
+                    }).done(function(e){
+                      if(e.code==200){
+                        alert(e.msg);//删除只有数据删除，页面没有效果，需要自己刷新
+                      }else{
+                        alert(e.msg);
+                      }
+                    });
+                });
+                //规格 删除
+                $('[data-click="del"]').on('click',function(){
+                    var c_id=$(this).attr('c-id');
+                    if(c_id){}else{alert('没有删除条件');return false;}
+                    $.ajax({
+                      url:"{:url('spec/spec_del')}",
+                      type:'post',
+                      data:{c_id:c_id},
+                    }).done(function(e){
+                      if(e.code==200){
+                        alert(e.msg);
+                      }else{
+                        alert(e.msg);
+                      }
+                    });
+                });
+              }else{$('#div-spec-show').empty();alert('没有规格');}
+        });//ajax
+  });
+  //监听 quiz1
+  form.on('select(quiz1)', function(data){
+    var id=$('#quiz1').val();
+    if(id==0){alert('请选择');return false;}
+    $.ajax({
+        url:"{:url('spec/get_cate2')}",
+        type:'post',
+        data:{id:id},
+    }).done(function(e){
+      $("#quiz2").empty();
+      $("#quiz3").empty();
+      if(e.code==200){
+          var tr='<option value="0">请选择</option>';
+          $.each(e.list,function (i,v) {
+            tr+='<option value="'+v.id+'">'+v.name+'</option>';
+          });
+              $('#quiz2').append(tr);
+              form.render('select');
+      }else{
+        alert('没有2级分类');
+      }
+    });//ajax
+  });
+  //监听 quiz2
+  form.on('select(quiz2)', function(data){
+    var id=$('#quiz2').val();
+    if(id==0){alert('请选择');return false;}
+    $.ajax({
+        url:"{:url('spec/get_cate3')}",
+        type:'post',
+        data:{id:id},
+    }).done(function(e){
+      $("#quiz3").empty();
+      if(e.code==200){
+          var tr='<option value="0">请选择</option>';
+          $.each(e.list,function (i,v) {
+            tr+='<option value="'+v.id+'">'+v.name+'</option>';
+          });
+          $('#quiz3').append(tr);
+          form.render('select');
+      }else{
+        alert('没有3级分类');
+      }
+    });
+  });
+
+});
+</script>
+</body>
+</html><!-- 
+        console.log(data.elem); //得到select原始DOM对象
+        console.log(data.value); //得到被选中的值
+        console.log(data.othis); //得到美化后的DOM对象 -->

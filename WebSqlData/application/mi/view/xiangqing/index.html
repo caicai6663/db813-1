@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="author" content="order by dede58.com"/>
+		<title>小米6立即购买-小米商城</title>
+		<script src="/static/js/jquery.js"></script>
+		<link rel="stylesheet" type="text/css" href="/static/mi/css/style.css">
+	</head>
+	<body>
+	<!-- start header -->
+		<header>
+			<div class="top center">
+				<div class="left fl">
+					<ul>
+						<li><a href="http://www.mi.com/" target="_blank">小米商城</a></li>
+						<li>|</li>
+						<li><a href="">MIUI</a></li>
+						<li>|</li>
+						<li><a href="">米聊</a></li>
+						<li>|</li>
+						<li><a href="">游戏</a></li>
+						<li>|</li>
+						<li><a href="">多看阅读</a></li>
+						<li>|</li>
+						<li><a href="">云服务</a></li>
+						<li>|</li>
+						<li><a href="">金融</a></li>
+						<li>|</li>
+						<li><a href="">小米商城移动版</a></li>
+						<li>|</li>
+						<li><a href="">问题反馈</a></li>
+						<li>|</li>
+						<li><a href="">Select Region</a></li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+				<div class="right fr">
+					<div class="gouwuche fr"><a href="{:url('gouwuche/index')}">购物车</a></div>
+					<div class="fr">
+						<ul>
+							<li><a href="{:url('login/index')}" target="_blank">登录</a></li>
+							<li>|</li>
+							<li><a href="{:url('register/index')}" target="_blank" >注册</a></li>
+							<li>|</li>
+							<li><a href="">消息通知</a></li>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</header>
+	<!--end header -->
+
+<!-- start banner_x -->
+		<div class="banner_x center">
+			<a href="{:url('index/index')}" target="_blank"><div class="logo fl"></div></a>
+			<a href=""><div class="ad_top fl"></div></a>
+			<div class="nav fl">
+				<ul>
+					<li><a href="">小米手机</a></li>
+					<li><a href="">红米</a></li>
+					<li><a href="">平板·笔记本</a></li>
+					<li><a href="">电视</a></li>
+					<li><a href="">盒子·影音</a></li>
+					<li><a href="">路由器</a></li>
+					<li><a href="">智能硬件</a></li>
+					<li><a href="">服务</a></li>
+					<li><a href="">社区</a></li>
+				</ul>
+			</div>
+			<div class="search fr">
+				<form action="" method="post">
+					<div class="text fl">
+						<input type="text" class="shuru"  placeholder="小米6&nbsp;小米MIX现货">
+					</div>
+					<div class="submit fl">
+						<input type="submit" class="sousuo" value="搜索"/>
+					</div>
+					<div class="clear"></div>
+				</form>
+				<div class="clear"></div>
+			</div>
+		</div>
+<!-- end banner_x -->
+	<!-- xiangqing -->
+		<div class="xiangqing">
+			<div class="neirong w">
+				<div class="xiaomi6 fl">小米6</div>
+				<nav class="fr">
+					<li><a href="">概述</a></li>
+					<li>|</li>
+					<li><a href="">变焦双摄</a></li>
+					<li>|</li>
+					<li><a href="">设计</a></li>
+					<li>|</li>
+					<li><a href="">参数</a></li>
+					<li>|</li>
+					<li><a href="">F码通道</a></li>
+					<li>|</li>
+					<li><a href="">用户评价</a></li>
+					<div class="clear"></div>
+				</nav>
+				<div class="clear"></div>
+			</div>	
+		</div>
+		<!-- 内容 -->
+	<form action="{:url('xiangqing/order')}" method="post">
+		<div class="jieshao mt20 w">
+			<!-- 展示左侧大图 -->
+			<div class="left fl"><img src="/static/mi/image/liebiao_xiaomi6.jpg"></div>
+			<!-- 展示商品参数 -->
+			<div class="right fr">
+				<!-- <div class="ft20 ml20 mt20">选择版本</div> -->
+				{volist name="a_good" id="v"}
+				<div class="xzbb ml20 mt10">
+					<div class="banben fl">
+						<a>
+							<span>{$v.spec_name}</span>
+							<span>{$v.price}元</span>
+							<!-- 单选 -->
+							<span><input type="radio" name="banben" value="{$v.id}"></span>
+						</a>
+					</div>
+				</div>
+				{/volist}
+				<div class="xqxq mt20 ml20"></div>
+				<div class="xiadan ml20 mt20">
+					<input class="jrgwc" type="submit" value="立即选购"/><!-- 表单提交 -->
+					<input class="jrgwc" type="button" name="jrgwc" value="加入购物车" onclick="addcar()" />
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</form>
+	</body>
+</html>
+<script>
+//加入购物车
+function addcar(){
+	var banben=$(":radio[name='banben']:checked").val();
+	if (!banben) {
+		alert('请选择商品');return false;
+	}
+	$.ajax({
+		url:'{:url('gouwuche/addcar')}',
+		type:'post',
+		data:{banben:banben},
+		success:function(e){
+			if(e.code==200){
+				alert('ok');
+				window.location.href="{:url('gouwuche/index')}";
+			}else{
+				alert('no');
+			}
+		}
+	});
+}
+
+var spec_num = {:count($a_good)};
+
+$(function(){
+	$('.spec_class').click(function(){
+		var name = $(this).attr('name');
+		$('[name="'+name+'"]').removeClass('checked');
+		$(this).addClass('checked');
+		get_spec();
+	});
+});
+function get_spec(){
+	var spec_a = $('a.checked');
+	var spec_value='';
+	spec_a.each(function(){
+		spec_value+=$(this).data('id')+'_';
+	});
+	if(spec_num == spec_a.length){
+		$.ajax({
+	   		method: "POST",
+	   		url: "{:url('Xiangqing/get_spec')}",
+	   		data: {spec_value,spec_value},
+	   		dataType: 'json'
+	   	}).done(function( res ) {
+	   		if(res.code == '0000'){
+	   			$('#spec_value').html(res.data.spec_name);
+	   			$('#spec_price').html(res.data.price);
+	   		}else{
+	   			layer.msg(res.msg);
+	   		}
+	   	});
+	}
+}
+</script>

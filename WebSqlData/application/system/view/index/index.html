@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>视图层 的 模板</title>  <!-- 导入文件 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->{include file='public/top' /}
+    <!-- 左侧 -->{include file='public/left' /}
+    <div class="layui-body"><!-- 内容开始 -->
+      <!-- 内容主体区域 -->
+    </div><!-- 内容 结束 -->
+    <!-- 底部 -->{include file='public/bottom' /}
+  </div>
+</body>
+</html>

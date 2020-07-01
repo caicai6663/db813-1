@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>广告 添加</title>  <!-- 导入文件 -->  {include file='public/file' /}
+</head>
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->{include file='public/top' /}
+    <!-- 左侧 -->{include file='public/left' /}
+    <div class="layui-body"><!-- 内容开始 -->
+      <h1>广告 添加</h1>
+      <form class="layui-form" action="" id="myform">
+<div class="layui-form-item">
+  <label class="layui-form-label">广告名称</label>
+  <div class="layui-input-block">
+    <input type="" name="ad_name" lay-verify="title" autocomplete="off" class="layui-input">
+  </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">广告文件类型</label>
+    <div class="layui-input-block">
+      <select name="media_type" lay-filter="aihao">
+        <option value="1" selected="">图片</option>
+        <option value="2">flash</option>
+        <option value="3">文本</option>
+      </select>
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">选择广告位</label>
+    <div class="layui-input-block">
+      <select name="pid" lay-filter="aihao">
+        {foreach $list as $key=>$vo }
+        <option value="{$vo.position_id}">{$vo.position_name}</option>
+        {/foreach}
+      </select>
+    </div>
+</div>
+<div class="layui-form-item">
+<div class="layui-inline">
+  <label class="layui-form-label">日期范围</label>
+  <div class="layui-input-inline">
+    <input type="" name="data_range" class="layui-input" id="date_range" placeholder=" - ">
+  </div>
+</div>
+</div>
+<div class="layui-form-item">
+  <label class="layui-form-label">广告链接</label>
+  <div class="layui-input-block">
+    <input type="" name="ad_link" lay-verify="title" autocomplete="off" class="layui-input">
+  </div>
+</div>
+<div class="layui-form-item">
+  <label class="layui-form-label">广告图片</label>
+  <div class="layui-upload">
+    <button type="button" class="layui-btn" id="ad_img_button">上传图片</button>
+    <div class="layui-input-block">
+      <div class="layui-upload-list">
+        <img class="layui-upload-img" id="ad_img_link" width="100" height="100">
+        <div id="Img_Demo_Text"></div><!-- 演示失败状态，并实现重传 -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="layui-form-item">
+  <label class="layui-form-label">背景色</label>
+  <div class="layui-input-block">
+    <div id="choose_color"></div>
+    <input type="hidden" name="bgcolor" id="bgcolor" value="">
+  </div>
+</div>
+<div class="layui-form-item">
+  <label class="layui-form-label">排序</label>
+  <div class="layui-input-block">
+    <input type="" name="orderby" lay-verify="title" autocomplete="off" class="layui-input">
+  </div>
+</div>
+<div class="layui-form-item">
+  <label class="layui-form-label">广告单价</label>
+  <div class="layui-input-block">
+    <input type="" name="unit_price" lay-verify="title" autocomplete="off" class="layui-input">
+  </div>
+</div>
+<div class="layui-form-item">
+  <label class="layui-form-label">广告商余额</label>
+  <div class="layui-input-block">
+    <input type="" name="money" lay-verify="title" autocomplete="off" class="layui-input">
+  </div>
+</div>
+<div class="layui-form-item">
+  <div class="layui-input-block">
+    <button type="submit" class="layui-btn" lay-submit="" lay-filter="hand_in">立即提交</button>
+    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+  </div>
+</div>
+      </form>
+    </div><!-- 内容 结束 -->
+    <!-- 底部 -->{include file='public/bottom' /}
+  </div>
+</body>
+</html><script type="text/javascript">
+layui.use(['form', 'layedit', 'laydate','upload','colorpicker'], function(){
+
+var form = layui.form
+,layer = layui.layer
+,layedit = layui.layedit
+,laydate = layui.laydate
+,$ = layui.jquery
+,upload = layui.upload/*得到upload对象*/
+,colorpicker = layui.colorpicker;
+
+//颜色选择器
+colorpicker.render({
+  elem: '#choose_color'
+  ,color: 'blue' /*设置默认色*/
+  ,done: function(color){
+    layer.tips('选择了：'+ color, this.elem);
+    $('#bgcolor').val(color);
+  }
+});
+
+//普通图片上传
+///*创建一个上传组件*/
+var uploadInst = upload.render({
+  elem: '#ad_img_button' /*绑定元素*/
+  ,url: "{:url('ad/upload')}" /*上传接口*/
+  ,field:'ad_img_upload_sign' /*后台input()的参数*/
+  ,before: function(obj){
+    //预读本地文件示例，不支持ie8
+    obj.preview(function(index, file, result){
+      $('#ad_img_link').attr('src', result); //图片链接（base64）
+    });
+  }
+  /*上传完毕回调*/
+  ,done: function(res){
+    if(res.code==200){
+      $('#myform').append('<input type="hidden" name="ad_path" value='+res.path+'/>');
+      return layer.msg('上传成功');
+    }else{
+      return layer.msg('上传失败');
+    }
+  }
+  /*请求异常回调*/
+  ,error: function(){
+    //演示失败状态，并实现重传
+    var Img_Demo_Text = $('#Img_Demo_Text');
+    Img_Demo_Text.html('<span style="color: #FF5722;">上传失败</span><a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+    Img_Demo_Text.find('.demo-reload').on('click', function(){
+      uploadInst.upload();
+    });
+  }
+});
+
+//日期范围
+laydate.render({
+  elem: '#date_range'
+  ,range: '~'
+});
+
+//监听提交
+form.on('submit(hand_in)', function(data){
+  if (!data['field']['bgcolor']) {
+    layer.msg('请选择 背景颜色');return false;
+  }
+  $.ajax({
+    method:'post',
+    url:"{:url('ad/ad_add')}",
+    data:data.field,
+    dataType:'json',
+  }).done(function(res){
+    console.log(res);console.log(typeof(res));
+    if (res.code==200) {
+      layer.msg('add ok');window.location.href="{:url('ad/ad_list')}"
+    }else{layer.msg(res.msg);}
+  });
+  return false;
+});
+
+});
+</script>

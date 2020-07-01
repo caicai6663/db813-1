@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="author" content="order by dede58.com"/>
+		<title>我的购物车-小米商城</title>
+		<script src="/static/js/jquery.js"></script>
+		<link rel="stylesheet" type="text/css" href="/static/mi/css/style.css">
+	</head>
+	<body>
+<!-- start banner_x -->
+		<div class="banner_x center">
+			<a href="{:url('index/index')}" target="_blank"><div class="logo fl"></div></a>
+			
+			<div class="wdgwc fl ml40">立即选购 核对订单信息</div>
+			<div class="wxts fl ml20">温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</div>
+			<div class="dlzc fr">
+				<ul>
+					<li><a href="{:url('login/index')}" target="_blank">登录</a></li>
+					<li>|</li>
+					<li><a href="{:url('register/index')}" target="_blank">注册</a></li>	
+				</ul>
+			</div>
+		</div>
+		<div class="xiantiao"></div>
+
+		<!-- 内容开始 -->
+		<div align="center">
+		<!-- 收货地址-->
+		<p>收货人信息<a href="{:url('selfinfo/address_save')}">[使用新地址]</a></p>
+		<!-- 表体 -->
+		<table border="1">
+		{foreach $myaddress as $key=>$vo }
+			<tr>
+				<!-- 单选框 -->
+				<td><input type="radio" class="choose" name="address_id" value="{$vo.id}" /></td>
+				<!-- 收货人 -->
+				<td>{$vo.name}</td>
+				<td>{if $vo.is_default==1}<b style="color: red">默认</b>{else /}{/if}</td>
+				<!-- 所在地区 -->
+				<td>所在地区：{$vo.country}{$vo.province}{$vo.city}{$vo.area}{$vo.town}</td>
+				<!-- 详细地址 -->
+				<td>详细地址：{$vo.place}</td>
+				<!-- 手机 -->
+				<td>手机号：{$vo.phone}</td>
+			</tr>
+		{/foreach}
+		</table>
+		<br>
+		<!-- 发票 -->
+		<p>发票信息</p>
+		<span>发票抬头</span><input type="" name="">
+		<br>
+		<br>
+		<!-- 物流信息 -->
+		<table>
+			<tr>
+				<td>选择物流：</td>
+				<td>
+					<select>
+						<option>申通物流</option>
+						<option>韵达物流</option>
+						<option>圆通物流</option>
+						<option>邮政物流</option>
+						<option>顺丰物流</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>给商家留言：</td>
+				<td><input type="" id="user_note"><br></td>
+			</tr>
+		</table>
+		<br>
+		<!-- 商品信息 -->
+		<table border="1">
+			<thead>
+				<tr>
+					<td>商品名称</td>
+					<td>规格</td>
+					<td>单价（元）</td>
+					<td>数量</td>
+					<td>小计（元）</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{$common.name}</td>
+					<td>{$good_info.spec_name}</td>
+					<td>{$good_info.price}</td>
+					<td>1</td>
+					<td>{$good_info.price}</td>
+				</tr>
+			</tbody>
+		</table>
+		<br>
+		<!-- 优惠卷信息 -->
+		<table>
+			<tr>
+				<td>优惠卷： </td>
+				<td>
+					<select>
+						<option>选择优惠卷</option>
+					</select>
+					<input type="" name="" value="请输入优惠卷码">
+				</td>
+			</tr>
+		</table>
+		<br>
+		<!-- 订单金额计算 -->
+		<table>
+			<tr>
+				<td>商品总金额：</td>
+				<td>{$good_info.price}</td>
+			</tr>
+			<tr>
+				<td>运费：</td>
+				<td>8.00</td>
+			</tr>
+			<tr>
+				<td>使用优惠卷抵扣：</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>使用积分抵扣：</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>优惠活动：</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>应付金额：</td>
+				<td>{$good_info.price+8.00}</td>
+			</tr>
+		</table>
+		<!-- 订单底部 提交订单 -->
+		<input type="button" name="" value="提交订单" id="submit_order">
+		</div>
+		<!-- 内容结束 -->
+		<script type="text/javascript">
+			$('#submit_order').click(function(){
+				//用户给商家的留言
+				var user_note=$('#user_note').val();
+				//收货地址信息ID
+				var address_id=$('.choose:checked').val();
+				if(!address_id){
+					alert('请选择收货地址');return false;
+				}
+				//单品信息
+				var good_price="{$good_info.price}";//单品的单价
+				//var spec_name="{$good_info.spec_name}";//单品的规格
+				var spec_value="{$good_info.spec_value}";//单品的规格值
+				//商品通用信息
+				var good_name="{$common.name}";//商品名称
+				var good_id="{$common.id}";//商品名称
+				//入库
+				$.ajax({
+					url:"{:url('xiangqing/order_save')}",
+					data:{
+						user_note:user_note,
+						address_id:address_id,
+						good_price:good_price,
+						spec_value:spec_value,
+						good_name:good_name,
+						good_id:good_id
+					},
+					type:'post',
+					success:function(e){
+						if(e.code==200){
+							alert('ok');window.location.href="{:url('dingdanzhongxin/index')}";
+						}else{
+							alert('no');
+						}
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
